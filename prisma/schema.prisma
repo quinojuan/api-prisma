@@ -17,5 +17,5 @@ model producto {
   id           Int    @id @default(autoincrement())
   descripcion  String
   precio_venta Int
-  codigo       Json
+  codigo       Json // me permite agregar tanto enteros como strings
 }
