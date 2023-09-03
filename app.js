@@ -92,26 +92,21 @@ app.delete("/post/:id", async (req, res) => {
 
 // Agregar productos
 
-// app.post("/productos", async (req, res) => {
-
-//   try {
-//     for (const conjuntoDatos of excelData) {
-//       const [id, descripcion, precio_venta] = conjuntoDatos;
-
-//       await prisma.producto.create({
-//         data: {
-//           id,
-//           descripcion,
-//           precio_venta,
-//         },
-//       });
-//     }
-//     res.json("Operacion finalizada!");
-//   } catch (error) {
-//     console.log({error: error.message})
-//   }
-
-// });
+app.post("/productos", async (req, res) => {
+  try {
+    const { codigo, descripcion, precio_venta } = req.body;
+    const newProduct = await prisma.producto.create({
+      data: {
+        codigo,
+        descripcion,
+        precio_venta,
+      },
+    });
+    res.json("Producto creado con éxito");
+  } catch (error) {
+    console.log({ error: error.message });
+  }
+});
 
 app.listen(3000, () => {
   console.log(`Server ready at: http://localhost:3000`);
