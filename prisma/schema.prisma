@@ -19,3 +19,54 @@ model producto {
   precio_venta Int
   codigo       Json // me permite agregar tanto enteros como strings
 }
+
+model informe {
+  id            Int          @id @default(autoincrement())
+  mes           Meses
+  publicaciones Int
+  videos        Int
+  horas         Int
+  revisitas     Int
+  estudios      Int
+  notas         String
+  publicador    publicadores @relation(fields: [publicadorId], references: [id])
+  publicadorId  Int
+}
+
+model publicadores {
+  id                 Int       @id @default(autoincrement())
+  nombre             String
+  apellido           String
+  fecha_nacimiento   DateTime
+  fecha_bautismo     DateTime?
+  esperanza          Esperanza
+  anciano            Boolean   @default(false)
+  siervo_ministerial Boolean   @default(false)
+  precursor_regular  Boolean   @default(false)
+  informes           informe[]
+}
+
+enum Genero {
+  HOMBRE
+  MUJER
+}
+
+enum Esperanza {
+  OTRAS_OVEJAS
+  UNGIDO
+}
+
+enum Meses {
+  ENERO
+  FEBRERO
+  MARZO
+  ABRIL
+  MAYO
+  JUNIO
+  JULIO
+  AGOSTO
+  SEPTIEMBRE
+  OCTUBRE
+  NOVIEMBRE
+  DICIEMBRE
+}
