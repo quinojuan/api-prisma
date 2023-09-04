@@ -108,6 +108,83 @@ app.post("/productos", async (req, res) => {
   }
 });
 
+//**************** SERVICE REPORT ****************//
+
+app.post("/publicador", async (req, res) => {
+  let {
+    nombre,
+    apellido,
+    genero,
+    fecha_nacimiento,
+    fecha_bautismo,
+    esperanza,
+    anciano,
+    siervo_ministerial,
+    precursor_regular,
+  } = req.body;
+
+  fecha_nacimiento = fecha_nacimiento + "T00:00:00Z";
+
+  try {
+    const newPub = await prisma.publicadores.create({
+      data: {
+        nombre,
+        apellido,
+        genero,
+        fecha_nacimiento,
+        fecha_bautismo,
+        esperanza,
+        anciano,
+        siervo_ministerial,
+        precursor_regular,
+      },
+    });
+    res.json(newPub);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+app.post("/informe", async (req, res) => {
+  let {
+    mes,
+    publicaciones,
+    videos,
+    horas,
+    revisitas,
+    estudios,
+    notas,
+    publicadorId,
+  } = req.body;
+
+  try {
+    const newInforme = await prisma.informe.create({
+      data: {
+        mes,
+        publicaciones,
+        videos,
+        horas,
+        revisitas,
+        estudios,
+        notas,
+        publicadorId,
+      },
+    });
+    res.json(newInforme);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+app.get("/publicadores", async (req, res) => {
+  const allPublicadores = await prisma.publicadores.findMany({
+    include: {
+      informes: []
+    }
+  });
+  res.json(allPublicadores);
+});
+
 app.listen(3000, () => {
   console.log(`Server ready at: http://localhost:3000`);
 });

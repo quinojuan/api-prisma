@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE `informe` MODIFY `publicaciones` INTEGER NULL DEFAULT 0,
+    MODIFY `videos` INTEGER NULL DEFAULT 0,
+    MODIFY `horas` INTEGER NULL DEFAULT 0,
+    MODIFY `revisitas` INTEGER NULL DEFAULT 0,
+    MODIFY `estudios` INTEGER NULL DEFAULT 0,
+    MODIFY `notas` VARCHAR(191) NULL;

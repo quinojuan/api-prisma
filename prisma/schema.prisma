@@ -22,13 +22,14 @@ model producto {
 
 model informe {
   id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
   mes           Meses
-  publicaciones Int
-  videos        Int
-  horas         Int
-  revisitas     Int
-  estudios      Int
-  notas         String
+  publicaciones Int? @default(0)
+  videos        Int? @default(0)
+  horas         Int? @default(0)
+  revisitas     Int? @default(0)
+  estudios      Int? @default(0)
+  notas         String?
   publicador    publicadores @relation(fields: [publicadorId], references: [id])
   publicadorId  Int
 }
@@ -37,6 +38,7 @@ model publicadores {
   id                 Int       @id @default(autoincrement())
   nombre             String
   apellido           String
+  genero             Genero
   fecha_nacimiento   DateTime
   fecha_bautismo     DateTime?
   esperanza          Esperanza
@@ -69,4 +71,11 @@ enum Meses {
   OCTUBRE
   NOVIEMBRE
   DICIEMBRE
+}
+
+enum Grupos {
+ G1
+ G2
+ G3
+ G4
 }
