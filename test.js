@@ -22,3 +22,16 @@ const algo = [" A238", "CAMISAS VARIAS", 4800, 0, 4, 1, "ALOHA"]
 const [campo1, campo2, campo3] = algo
 
 console.log(campo1)
+
+const dias = 18624
+const anios = dias % 365
+
+console.log(anios);
+
+function toDate(days) {
+    const date = new Date(1900, 0, 1);
+    date.setDate(date.getDate() + days);
+    return date.toISOString();
+  }
+
+  console.log(toDate(18624))

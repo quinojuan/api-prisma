@@ -8,12 +8,17 @@ const app = express();
 app.use(express.json());
 
 const file = "./productos2.xls"; // Ruta al archivo Excel
+const publishers = "./publicadores.xlsx";
 
 const workbook = XLSX.readFile(file);
 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-console.log(excelData[1]);
+const publicadores = XLSX.readFile(publishers);
+const hojapublicadores = publicadores.Sheets[publicadores.SheetNames[0]];
+const publicadoresData = XLSX.utils.sheet_to_json(hojapublicadores, { header: 1 });
+
+console.log(publicadoresData[1]);
 
 async function insertarDatos() {
   for (const conjuntoDatos of excelData) {
