@@ -24,11 +24,11 @@ model informe {
   id            Int          @id @default(autoincrement())
   createdAt     DateTime     @default(now())
   mes           Meses
-  publicaciones Int? @default(0)
-  videos        Int? @default(0)
-  horas         Int? @default(0)
-  revisitas     Int? @default(0)
-  estudios      Int? @default(0)
+  publicaciones Int?         @default(0)
+  videos        Int?         @default(0)
+  horas         Int?         @default(0)
+  revisitas     Int?         @default(0)
+  estudios      Int?         @default(0)
   notas         String?
   publicador    publicadores @relation(fields: [publicadorId], references: [id])
   publicadorId  Int
@@ -39,12 +39,14 @@ model publicadores {
   nombre             String
   apellido           String
   genero             Genero
-  fecha_nacimiento   DateTime
-  fecha_bautismo     DateTime?
+  fecha_nacimiento   String?
+  fecha_bautismo     String?
   esperanza          Esperanza
-  anciano            Boolean   @default(false)
-  siervo_ministerial Boolean   @default(false)
-  precursor_regular  Boolean   @default(false)
+  anciano            Int   @default(0)
+  siervo_ministerial Int   @default(0)
+  precursor_regular  Int   @default(0)
+  precursor_especial Int   @default(0)
+  grupo              Grupo
   informes           informe[]
 }
 
@@ -73,9 +75,9 @@ enum Meses {
   DICIEMBRE
 }
 
-enum Grupos {
- G1
- G2
- G3
- G4
+enum Grupo {
+  G1
+  G2
+  G3
+  G4
 }

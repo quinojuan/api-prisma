@@ -16,7 +16,9 @@ const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
 const publicadores = XLSX.readFile(publishers);
 const hojapublicadores = publicadores.Sheets[publicadores.SheetNames[0]];
-const publicadoresData = XLSX.utils.sheet_to_json(hojapublicadores, { header: 1 });
+const publicadoresData = XLSX.utils.sheet_to_json(hojapublicadores, {
+  header: 1,
+});
 
 console.log(publicadoresData[1]);
 
@@ -33,6 +35,7 @@ async function insertarDatos() {
     });
   }
 }
+
 const verificarBase = async () => {
   try {
     const query = await prisma.producto.findMany();
@@ -48,6 +51,56 @@ const verificarBase = async () => {
 };
 
 verificarBase();
+
+async function cargarPublicadores() {
+  for (const conjuntoDatosDos of publicadoresData) {
+    const [
+      nombre,
+      apellido,
+      genero,
+      fecha_nacimiento,
+      fecha_bautismo,
+      esperanza,
+      anciano,
+      siervo_ministerial,
+      precursor_regular,
+      precursor_especial,
+      grupo
+    ] = conjuntoDatosDos;
+
+    await prisma.publicadores.create({
+      data: {
+        nombre,
+        apellido,
+        genero,
+        fecha_nacimiento,
+        fecha_bautismo,
+        esperanza,
+        anciano,
+        siervo_ministerial,
+        precursor_regular,
+        precursor_especial,
+        grupo,
+      },
+    });
+  }
+}
+
+const verificarBasePublicadores = async () => {
+  try {
+    const query = await prisma.publicadores.findMany();
+    if (query.length === 0) {
+      cargarPublicadores();
+      console.log("Datos cargados en la DB");
+    } else {
+      console.log("Datos ya cargados");
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+verificarBasePublicadores();
 
 app.get("/", (req, res) => {
   res.json("Hola mundo!");
@@ -126,6 +179,7 @@ app.post("/publicador", async (req, res) => {
     anciano,
     siervo_ministerial,
     precursor_regular,
+    precursor_especial,
   } = req.body;
 
   fecha_nacimiento = fecha_nacimiento + "T00:00:00Z";
@@ -142,6 +196,7 @@ app.post("/publicador", async (req, res) => {
         anciano,
         siervo_ministerial,
         precursor_regular,
+        precursor_especial,
       },
     });
     res.json(newPub);
@@ -184,8 +239,8 @@ app.post("/informe", async (req, res) => {
 app.get("/publicadores", async (req, res) => {
   const allPublicadores = await prisma.publicadores.findMany({
     include: {
-      informes: []
-    }
+      informes: [],
+    },
   });
   res.json(allPublicadores);
 });
