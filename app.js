@@ -1,10 +1,19 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
+const cors = require("cors");
+const morgan = require("morgan");
 var XLSX = require("xlsx");
 
 const prisma = new PrismaClient();
 const app = express();
 
+app.use(morgan("dev"));
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
 const file = "./productos2.xls"; // Ruta al archivo Excel
@@ -65,7 +74,7 @@ async function cargarPublicadores() {
       siervo_ministerial,
       precursor_regular,
       precursor_especial,
-      grupo
+      grupo,
     ] = conjuntoDatosDos;
 
     await prisma.publicadores.create({
@@ -180,6 +189,7 @@ app.post("/publicador", async (req, res) => {
     siervo_ministerial,
     precursor_regular,
     precursor_especial,
+    grupo,
   } = req.body;
 
   fecha_nacimiento = fecha_nacimiento + "T00:00:00Z";
@@ -197,9 +207,10 @@ app.post("/publicador", async (req, res) => {
         siervo_ministerial,
         precursor_regular,
         precursor_especial,
+        grupo,
       },
     });
-    res.json(newPub);
+    prisma.res.json(newPub);
   } catch (error) {
     res.json(error.message);
   }
@@ -243,6 +254,17 @@ app.get("/publicadores", async (req, res) => {
     },
   });
   res.json(allPublicadores);
+});
+
+app.get("/ancianos", async (req, res) => {
+  const allAncianos = await prisma.publicadores.findMany({
+    where: {
+      grupo: "G3",
+    },
+  });
+  const result = allAncianos.map((e) => e.nombre);
+  res.json(result);
+  // res.json(allAncianos)
 });
 
 app.listen(3000, () => {

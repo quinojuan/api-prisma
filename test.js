@@ -35,3 +35,8 @@ function toDate(days) {
   }
 
   console.log(toDate(18624))
+
+  const nombress = "Juana Acevedo"
+
+  const divido = nombress.split(" ")
+  console.log(divido)
