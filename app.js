@@ -217,7 +217,10 @@ app.post("/publicador", async (req, res) => {
 });
 
 app.post("/informe", async (req, res) => {
+  console.log(req.body);
+
   let {
+    publicador,
     mes,
     publicaciones,
     videos,
@@ -225,22 +228,32 @@ app.post("/informe", async (req, res) => {
     revisitas,
     estudios,
     notas,
-    publicadorId,
   } = req.body;
+
+  const dividir = publicador.split(" ");
+
+  const pubFound = await prisma.publicadores.findMany({
+    where: {
+      AND: [{ nombre: dividir[0] }, { apellido: dividir[1] }],
+    },
+  });
+
+  console.log(pubFound);
 
   try {
     const newInforme = await prisma.informe.create({
       data: {
+        publicadorId: parseInt(pubFound[0].id),
         mes,
-        publicaciones,
-        videos,
-        horas,
-        revisitas,
-        estudios,
+        publicaciones: parseInt(publicaciones),
+        videos: parseInt(videos),
+        horas: parseInt(horas),
+        revisitas: parseInt(revisitas),
+        estudios: parseInt(estudios),
         notas,
-        publicadorId,
       },
     });
+    console.log(newInforme);
     res.json(newInforme);
   } catch (error) {
     res.json(error.message);
@@ -256,7 +269,9 @@ app.get("/publicadores", async (req, res) => {
   res.json(allPublicadores);
 });
 
-app.get("/ancianos", async (req, res) => {
+// esta ruta es de prueba
+
+app.get("/test", async (req, res) => {
   const allAncianos = await prisma.publicadores.findMany({
     where: {
       grupo: "G3",
