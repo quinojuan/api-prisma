@@ -282,6 +282,46 @@ app.get("/test", async (req, res) => {
   // res.json(allAncianos)
 });
 
+app.put("/publicador/:id", async (req, res) => {
+  const { id } = req.params;
+  const parsedID = parseInt(id);
+  const {
+    nombre,
+    apellido,
+    genero,
+    fecha_nacimiento,
+    fecha_bautismo,
+    esperanza,
+    anciano,
+    siervo_ministerial,
+    precursor_regular,
+    precursor_especial,
+    grupo,
+  } = req.body;
+
+  try {
+    const pubUdated = await prisma.publicadores.update({
+      where: { id: parsedID },
+      data: {
+        nombre,
+        apellido,
+        genero,
+        fecha_nacimiento,
+        fecha_bautismo,
+        esperanza,
+        anciano,
+        siervo_ministerial,
+        precursor_regular,
+        precursor_especial,
+        grupo,
+      },
+    });
+    res.json(pubUdated);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
 app.listen(3000, () => {
   console.log(`Server ready at: http://localhost:3000`);
 });
