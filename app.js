@@ -271,14 +271,22 @@ app.get("/publicadores", async (req, res) => {
 
 // esta ruta es de prueba
 
-app.get("/test", async (req, res) => {
-  const allAncianos = await prisma.publicadores.findMany({
-    where: {
-      grupo: "G3",
-    },
-  });
-  const result = allAncianos.map((e) => e.nombre);
-  res.json(result);
+app.get("/consulta?:id", async (req, res) => {
+  const { id } = req.query;
+  const idModified = parseInt(id)
+
+  try {
+    const filteredData = await prisma.publicadores.findMany({
+      where: {
+        id: idModified
+      },
+    });
+    console.log(filteredData)
+    res.json(filteredData);
+  } catch (error) {
+    res.json(error.message);
+  }
+  // const result = allAncianos.map((e) => e.nombre);
   // res.json(allAncianos)
 });
 
