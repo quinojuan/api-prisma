@@ -271,18 +271,27 @@ app.get("/publicadores", async (req, res) => {
 
 // esta ruta es de prueba
 
-app.get("/consulta?:id", async (req, res) => {
-  const { id } = req.query;
-  const idModified = parseInt(id)
+app.get("/consulta", async (req, res) => {
+  const { id, nombre } = req.query;
+  console.log({ nombre }, { id });
+  const idModified = parseInt(id);
 
   try {
     const filteredData = await prisma.publicadores.findMany({
       where: {
-        id: idModified
+        AND: [
+          {
+            id: idModified,
+          },
+          { nombre },
+        ],
       },
     });
-    console.log(filteredData)
-    res.json(filteredData);
+    if (!filteredData.length) {
+      console.log("no encontramos nada");
+      return res.json("no encontramos nada");
+    }
+    return res.json(filteredData);
   } catch (error) {
     res.json(error.message);
   }
