@@ -279,7 +279,7 @@ app.get("/consulta", async (req, res) => {
   try {
     const filteredData = await prisma.publicadores.findMany({
       where: {
-        AND: [
+        OR: [
           {
             id: idModified,
           },

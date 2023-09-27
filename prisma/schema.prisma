@@ -23,6 +23,7 @@ model producto {
 model informe {
   id            Int          @id @default(autoincrement())
   createdAt     DateTime     @default(now())
+  anio          Int          @default(2023)
   mes           Meses
   publicaciones Int?         @default(0)
   videos        Int?         @default(0)
