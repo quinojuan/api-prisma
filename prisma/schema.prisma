@@ -43,6 +43,7 @@ model publicadores {
   fecha_nacimiento   String?
   fecha_bautismo     String?
   esperanza          Esperanza
+  estado             Estado @default(ACTIVO)
   anciano            Int   @default(0)
   siervo_ministerial Int   @default(0)
   precursor_regular  Int   @default(0)
@@ -81,4 +82,59 @@ enum Grupo {
   G2
   G3
   G4
+}
+enum Estado {
+  ACTIVO
+  INACTIVO
+}
+
+model User {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  dni       Int       @unique
+  phone     Int
+  name      String
+  surname   String
+  Payment   Payment[]
+  services  Service[] @relation("CustomerServices")
+  role      Role      @default(CUSTOMER)
+}
+
+model Service {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  title      String
+  amount     Float
+  customer   User[]    @relation("CustomerServices")
+  customerId String
+  Payments   Payment[] @relation("PaymentService")
+}
+
+model Payment {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  type           Type      @default(CASH)
+  amount         Float
+  checkNumber    Int?
+  owner          String?
+  collectionDate DateTime?
+  note           String?
+  customer       User      @relation(fields: [customerId], references: [id])
+  customerId     String
+  services       Service[] @relation("PaymentService")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  SECRETARY
+}
+
+enum Type {
+  CARD
+  CASH
+  TRANSFER
+  CHECK
 }

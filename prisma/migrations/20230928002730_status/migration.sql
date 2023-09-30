@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `publicadores` ADD COLUMN `estado` ENUM('ACTIVO', 'INACTIVO') NOT NULL DEFAULT 'ACTIVO';

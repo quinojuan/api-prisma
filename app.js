@@ -309,6 +309,7 @@ app.put("/publicador/:id", async (req, res) => {
     fecha_nacimiento,
     fecha_bautismo,
     esperanza,
+    estado,
     anciano,
     siervo_ministerial,
     precursor_regular,
@@ -326,6 +327,7 @@ app.put("/publicador/:id", async (req, res) => {
         fecha_nacimiento,
         fecha_bautismo,
         esperanza,
+        estado,
         anciano,
         siervo_ministerial,
         precursor_regular,
@@ -334,6 +336,27 @@ app.put("/publicador/:id", async (req, res) => {
       },
     });
     res.json(pubUdated);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+app.post("/newuser", async (req, res) => {
+  const { dni, phone, name, surname, role } = req.body;
+
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        dni,
+        phone,
+        name,
+        surname,
+        role,
+      },
+    });
+
+    console.log(newUser);
+    res.json(newUser);
   } catch (error) {
     res.json(error.message);
   }
